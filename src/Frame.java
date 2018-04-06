@@ -1,9 +1,9 @@
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
  
 
@@ -20,12 +20,13 @@ import javax.imageio.ImageIO;
  */
 public class Frame extends javax.swing.JFrame {
 private boolean board[][]=new boolean[4][4];
-    private String Stavhry;
-    
+    private State.Stav state; 
+    BufferedImage img;
     /**
      * Creates new form Frame
      */
     public Frame() {
+    state = State.Stav.first;
         initComponents();
     }
 
@@ -462,7 +463,7 @@ private boolean board[][]=new boolean[4][4];
     //10
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        if (Stavhry==State.Stav.first.toString())
+       
                 processclick(10); 
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -474,23 +475,29 @@ private boolean board[][]=new boolean[4][4];
     }//GEN-LAST:event_jButton17ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-for (int i=0;i<4;i++)   
-    for (int j=0;j<4;j++)   
-board[i][j]=false;
+   state=State.Stav.playing;
+        for(int i=0;i<4;i++)
+            for(int j=0;j<4;j++)
+                board[i][j]=false;
 
-
-
-// TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
-public void toogle(int p) throws IOException{
-BufferedImage img = null;
-int row=(p-1)/4;
-int col=(p-1)/4;
+ public void toggle(int i) throws Exception{
+        int col=(i-1)%4;
+        int row=(i-1)/4;
+        board[row][col] = !board[row][col];
+        
+    
+        if(board[row][col]==false){
+             img = ImageIO.read(new File("C://ob.png"));  
+        }
+        else{
+           img = ImageIO.read(new File("C://ob2.png"));   
+        }
+        jButton4.setIcon(new ImageIcon(img)  );
+    }
 
-if(board[row][col] ==false)
    
-    img = ImageIO.read(new File("C://ob.png"));
-}
+
     /**
      * @param args the command line arguments
      */
@@ -555,7 +562,14 @@ if(board[row][col] ==false)
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 
-    private void processclick(int i) {
-       System.out.println(i); //To change body of generated methods, choose Tools | Templates.
+  private void processclick(int i)   {
+        try {
+            if (state == State.Stav.playing) {
+                System.out.println("You clicked on " + i);
+                toggle(10);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }
