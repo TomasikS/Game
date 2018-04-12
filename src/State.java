@@ -12,6 +12,6 @@ public class State {
 
       
   public enum Stav{
-   first,playing,end;
+   first,playing,end, generate;
    }
 }
